@@ -8,4 +8,4 @@
 - Turn on headlights by covering the light sensor
 - Have fun!
 
-[Video](https://www.youtube.com/watch?v=jcc_io_xzxY)
+[Video](https://www.youtube.com/watch?v=ydF6XARGv7A)

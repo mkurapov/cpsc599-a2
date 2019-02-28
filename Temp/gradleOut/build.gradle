@@ -40,7 +40,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 28
-        applicationId 'com.mkurapov.a1'
+        applicationId 'com.mkurapov.a2'
         ndk {
             abiFilters 'armeabi-v7a', 'x86'
         }

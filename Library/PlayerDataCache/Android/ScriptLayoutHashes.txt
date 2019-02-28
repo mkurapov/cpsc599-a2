@@ -175,6 +175,6 @@ ef66967d1bb7f04115872358fec8f421 EasyAR.Unity.dll:EasyAR.RecorderBaseBehaviour
 6b270eaf45f51335e359fa04a55f2246 EasyAR.Unity.dll:EasyAR.VideoPlayerBaseBehaviour
 f0d7e81f97235cde57335a7da56d1c51 Assembly-CSharp.dll:EasyAR.ImageTrackerBehaviour
 8649814970b42d345b89944b862453cc Unity.TextMeshPro.dll:TMPro.TMP_SubMesh
-3aada580922ed0144f40e6f902c72971 Assembly-CSharp.dll:.PlayerController
+71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:.PlayerController
 6b270eaf45f51335e359fa04a55f2246 Assembly-CSharp.dll:EasyAR.VideoPlayerBehaviour
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:EasyAR.QRCodeScannerBehaviour

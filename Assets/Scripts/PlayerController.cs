@@ -9,8 +9,10 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private AndroidJavaObject plugin;
     private Rigidbody rb;
-    public bool isMoving = false;
+    private bool isAbleToMove = false;
+    private bool isFinished = false;
     private float speed = 0.4f;
+    private Light gameLight;
 
     private GameObject currentTarget;
     private int targetIndex = 0;
@@ -18,10 +20,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        //gameLight = GetComponent<Light>();
 
-        #if UNITY_ANDROID
-            plugin = new AndroidJavaClass("jp.kshoji.unity.sensor.UnitySensorPlugin").CallStatic<AndroidJavaObject>("getInstance");
-        #endif
+#if UNITY_ANDROID
+        plugin = new AndroidJavaClass("jp.kshoji.unity.sensor.UnitySensorPlugin").CallStatic<AndroidJavaObject>("getInstance");
+        plugin.Call("startSensorListening", "accelerometer");
+        plugin.Call("startSensorListening", "light");
+        plugin.Call("startSensorListening", "gyroscope");
+#endif
     }
 
     void Update()
@@ -34,7 +40,37 @@ public class PlayerController : MonoBehaviour
         List<GameObject> targets = new List<GameObject> { target1, target2, target3 };
         var isSeeingAllTargets = targets.TrueForAll(t => t && t.activeSelf);
 
-        if (isSeeingAllTargets && isMoving)
+#if UNITY_ANDROID
+        if (plugin != null)
+        {
+            float[] lightValues = plugin.Call<float[]>("getSensorValues", "light");
+            float[] accValues = plugin.Call<float[]>("getSensorValues", "accelerometer");
+
+            if (lightValues != null)
+            {
+                //gameLight.intensity = 0.1f * lightValues[0];
+                Debug.Log(lightValues[0]);
+                //isAbleToMove = lightValues[0] < 5.0f; //only one value is provided
+            }
+
+            if (accValues != null)
+            {
+                Debug.Log(accValues[1]);
+                isAbleToMove = accValues[1] < 8.8f; //use y value to act as gas pedal
+
+                //Debug.Log("acc:" + string.Join(",", new List<float>(gyroValues).ConvertAll(i => i.ToString()).ToArray()[1]) );
+            }
+
+            //if (sensorValues != null)
+            //    {
+
+            //        Debug.Log("sensorValues:" + string.Join(",", new List<float>(sensorValues).ConvertAll(i => i.ToString()).ToArray()));
+            //    }
+            //}
+        }
+#endif
+
+        if (isSeeingAllTargets && isAbleToMove && !isFinished)
         {
             currentTarget = targets[targetIndex];
             transform.LookAt(currentTarget.transform);
@@ -45,22 +81,14 @@ public class PlayerController : MonoBehaviour
                 targetIndex++;
                 if (targetIndex == targets.Count)
                 {
-                    isMoving = false;
+                    isFinished = false;
                 }
             }
 
-            if (isMoving) { Move(); }
+            if (isAbleToMove) { Move(); }
         }
 
-        Debug.Log("Updating");
 
-        #if UNITY_ANDROID
-            if (plugin != null)
-            {
-                float[] sensorValue = plugin.Call<float[]>("getSensorValues", "accelerometer");
-                target1.GetComponent<Renderer>().material.color = Color.red;
-            }
-        #endif
     }
 
     void Move()

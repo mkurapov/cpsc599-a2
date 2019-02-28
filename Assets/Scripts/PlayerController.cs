@@ -9,8 +9,8 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private AndroidJavaObject plugin;
     private Rigidbody rb;
-    public bool isMoving = true;
-    private int speed = 1;
+    public bool isMoving = false;
+    private float speed = 0.4f;
 
     private GameObject currentTarget;
     private int targetIndex = 0;
@@ -18,7 +18,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-        plugin = new AndroidJavaClass("jp.kshoji.unity.sensor.UnitySensorPlugin").CallStatic<AndroidJavaObject>("getInstance");
+
+        #if UNITY_ANDROID
+            plugin = new AndroidJavaClass("jp.kshoji.unity.sensor.UnitySensorPlugin").CallStatic<AndroidJavaObject>("getInstance");
+        #endif
     }
 
     void Update()
@@ -50,11 +53,14 @@ public class PlayerController : MonoBehaviour
         }
 
         Debug.Log("Updating");
-        if (plugin != null)
-        {
-            float[] sensorValue = plugin.Call<float[]>("getSensorValues", "accelerometer");
 
-        }
+        #if UNITY_ANDROID
+            if (plugin != null)
+            {
+                float[] sensorValue = plugin.Call<float[]>("getSensorValues", "accelerometer");
+                target1.GetComponent<Renderer>().material.color = Color.red;
+            }
+        #endif
     }
 
     void Move()

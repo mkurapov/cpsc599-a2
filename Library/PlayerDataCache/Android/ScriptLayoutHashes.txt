@@ -1,6 +1,6 @@
 Android
 PlayerPath?
-/Users/max/dev/Unity/New Unity Project/APK/com.mkurapov.a1.apk
+/Users/max/dev/Unity/New Unity Project/APK/com.mkurapov.a2.apk
 SceneListBegin?
 Assets/Scenes/SampleScene.unity
 SceneListEnd?
